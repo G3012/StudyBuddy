@@ -1,0 +1,59 @@
+{% extends 'main.html' %}
+{% block content %}
+{% comment %} Giving a layout of grid to room container {% endcomment %}
+<style>
+    .room-container {
+        display: grid;
+        grid-template-columns : 3fr 1fr;
+    }
+</style>
+
+<div class="room-container">
+
+    <div>
+        {% comment %} Display name of room {% endcomment %}
+        <h1>{{room.name}}</h1>
+        {% comment %} Display desc of room {% endcomment %}
+        <p>{{room.description}}</p>
+        {% comment %} This is a container of messages {% endcomment %}
+        <div class="commment-wrapper">
+            <h3> Conversation </h3>
+            <hr>
+            {% comment %} looping over all the existing messages and display username of that message user, when that message was created and than the message.. {% endcomment %}
+            {% for message in room_messages %}
+            <div>
+                {% comment %} If user is the owner of message, only then show the opttion of deleting that message. {% endcomment %}
+                {% if request.user == message.user %}
+                <a href="{% url 'delete-message' message.id %}">Delete</a>
+                {% endif %}
+                {% comment %} timesince is used for displaying the time of message of how recent it was created. {% endcomment %}
+                <small>@{{message.user}} {{message.created|timesince}} ago</small>
+                <p>{{message.body}}</p>
+            </div>
+            {% endfor %}
+        </div>
+        {% comment %} Allow only a authenticated user to post any message. {% endcomment %}
+        {% if request.user.is_authenticated %}
+        <div class="comment-form">
+            <form method="POST" action="">
+                {% csrf_token %}
+                {% comment %} Here the new posted message is carried to views by this name which is 'body'. {% endcomment %}
+                <input type="text" name="body" placeholder="Write your message here..." />
+            </form>
+        </div>
+        {% endif %}
+    </div>
+
+    {% comment %} A container of participants {% endcomment %}
+    <div>
+        <h3> Participants</h3>
+        <hr>
+        {% comment %} looping over all the participants and displaying their name. {% endcomment %}
+        {% for participant in participants %}
+        <div>
+            <p>@{{participant.username}}</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %}

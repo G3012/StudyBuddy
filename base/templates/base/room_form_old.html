@@ -1,0 +1,15 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<div>
+    {% comment %} This is how we create any form {% endcomment %}
+    <form method="POST" action="">
+        {% comment %} This is just to prevent from forging/hacking. {% endcomment %}
+        {% csrf_token %} 
+        {% comment %} Prints the form one by one {% endcomment %}
+        {{form.as_p}}
+        {% comment %} An input button {% endcomment %}
+        <input type="submit" value="Submit"/>
+    </form>
+</div>
+{% endblock content %}

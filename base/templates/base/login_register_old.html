@@ -1,0 +1,35 @@
+{% extends 'main.html' %}
+{% block content %}
+{% comment %} If page is login, display login page else display sign up page {% endcomment %}
+{% if page == 'login' %}
+<div>
+    {% comment %} This is just a login form {% endcomment %}
+    <form method="POST" action="">
+        {% csrf_token%}
+        
+        <label>Username:</label>
+        <input type="text" name="username" placeholder="Enter Username" />
+        
+        <label>Password:</label>
+        <input type="text" name="password" placeholder="Enter Password" />
+
+        <input type="submit" value="Login" />
+    </form>
+    {% comment %} Asking if not Signed up and href link signup page {% endcomment %}
+    <p> Haven't Signed Up yet?</p>
+    <a href="{% url 'register'%}">Sign Up</a>
+</div>
+{% else %}
+<div>
+    {% comment %} This is just a registration form {% endcomment %}
+    <form method="POST" action="">
+        {% csrf_token%}
+        {{form.as_p}}
+        <input type="submit" value="Register" />
+    </form>
+    {% comment %} Asking Already signed up and href link to Login page {% endcomment %}
+    <p>Already Signed Up?</p>
+    <a href="{% url 'login'%}">Login</a>
+</div>
+{% endif %}
+{% endblock content%}
